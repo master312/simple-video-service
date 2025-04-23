@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Video Service</title>
+    <style>
+        body { background-color: #f0f0f0; }
+        .upload-form { 
+            margin: 20px;
+            padding: 20px;
+            background-color: #e0e0e0;
+        }
+        .video-list { 
+            margin: 20px;
+            padding: 20px;
+            background-color: #d0d0d0;
+        }
+        .upload-indicator { 
+            display: none; 
+            margin: 10px;
+            padding: 10px;
+            background-color: #c0c0c0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #999;
+        }
+        th {
+            background-color: #b0b0b0;
+        }
+        tr:nth-child(even) {
+            background-color: #c0c0c0;
+        }
+        tr:nth-child(odd) {
+            background-color: #d0d0d0;
+        }
+    </style>
+</head>
+<body>
+<h1>Simple Video Service</h1>
+
+<div class="upload-form">
+    <h2>Upload Video</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="video" accept=".flv" required>
+        <button type="submit">Upload</button>
+    </form>
+    <div id="uploadIndicator" class="upload-indicator">
+        Uploading video... Please wait...
+    </div>
+</div>
+
+<div class="video-list">
+    <h2>Available Videos</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Video Name</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="videoList">
+        <!-- TODOOOOO.... -->
+        </tbody>
+    </table>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
