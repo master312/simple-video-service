@@ -21,11 +21,11 @@ public class VideoService {
     private VideoFileRepository videoFileRepository;
 
     public enum VideoFileVariant {
-        // Loads original flv
+        // original flv
         ORIGINAL,
-        // Loads orignal in mp4 container
+        // orignal, but in mp4 container
         REMUX,
-        // Loads transcoded mp4 in 480p
+        // transcoded, mp4 @ 480p
         TRANSCODE,
     }
 
