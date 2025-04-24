@@ -1,16 +1,16 @@
 package com.sythinian.app.dto;
 
-import com.sythinian.app.model.VideoFile;
+import com.sythinian.app.model.VideoFileModel;
 
 public class VideoFileDto {
     private Long id;
     private String originalFilename;
-    private VideoFile.Status status;
+    private VideoFileModel.Status status;
 
     private VideoFileDto() {
     }
 
-    public static VideoFileDto fromEntity(VideoFile videoFile) {
+    public static VideoFileDto fromEntity(VideoFileModel videoFile) {
         VideoFileDto dto = new VideoFileDto();
         dto.id = videoFile.getId();
         dto.originalFilename = videoFile.getOriginalFilename();
@@ -26,7 +26,7 @@ public class VideoFileDto {
         return originalFilename;
     }
 
-    public VideoFile.Status getStatus() {
+    public VideoFileModel.Status getStatus() {
         return status;
     }
 } 

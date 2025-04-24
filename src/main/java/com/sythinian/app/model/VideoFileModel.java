@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
         indexes = {
                 @Index(name = "idx_status", columnList = "status")
         })
-public class VideoFile {
+public class VideoFileModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,11 +31,11 @@ public class VideoFile {
         AVAILABLE
     }
 
-    public VideoFile() {
+    public VideoFileModel() {
         this.status = Status.NONE;
     }
 
-    public VideoFile(String originalFilename) {
+    public VideoFileModel(String originalFilename) {
         this.originalFilename = originalFilename;
         this.status = Status.NONE;
     }
