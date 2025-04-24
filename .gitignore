@@ -38,6 +38,5 @@ out/
 
 
 ## Simple video service data ignores
-/runtime-data/video-files/*.flv
-/runtime-data/video-files/*.mp4
-/runtime-data/video-service.db
+/runtime-data/*
+!/runtime-data/#PLACEHOLDER
