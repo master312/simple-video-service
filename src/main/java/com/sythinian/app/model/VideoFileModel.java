@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "video_files",
@@ -24,6 +27,10 @@ public class VideoFileModel {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     public enum Status {
         NONE,
@@ -62,5 +69,13 @@ public class VideoFileModel {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 } 

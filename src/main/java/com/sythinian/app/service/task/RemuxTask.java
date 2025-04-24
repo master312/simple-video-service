@@ -110,7 +110,7 @@ public class RemuxTask extends VideoProcessingTask {
         av_packet_free(packet);
 
         videoService.saveVideoFile(video.getId(), VideoService.VideoFileVariant.REMUX, tempOutputFile);
-        System.out.println("Video ID " + video.getId() + " successfully remuxed to MP4 using low-level FFmpeg API.");
+        System.out.println("Video ID " + video.getId() + " successfully remuxed to MP4!");
     }
 
     @Override
@@ -142,7 +142,7 @@ public class RemuxTask extends VideoProcessingTask {
             tempOutputFile = File.createTempFile("remux_tmp_" + this.video.getId(), ".mp4");
             tempOutputFile.deleteOnExit();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to create temporary file for low-level remuxing", e);
+            throw new RuntimeException("Failed to create temporary file mp4 remuxing", e);
         }
 
         String outAbsPath = tempOutputFile.getAbsolutePath();

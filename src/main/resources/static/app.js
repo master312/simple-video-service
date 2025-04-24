@@ -15,8 +15,14 @@ document.addEventListener('DOMContentLoaded', function() {
     function displayVideos(videos) {
         videoList.innerHTML = '';
         
+        videos.sort((a, b) => b.id - a.id);
+
         videos.forEach(video => {
             const row = document.createElement('tr');
+
+            const idCell = document.createElement('td');
+            idCell.textContent = video.id;
+            row.appendChild(idCell);
 
             const nameCell = document.createElement('td');
             nameCell.textContent = video.originalFilename;
@@ -31,10 +37,16 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Downoad button if video is available
             if (video.status === 'AVAILABLE') {
-                const downloadButton = document.createElement('button');
-                downloadButton.textContent = 'Download';
-                downloadButton.onclick = () => window.location.href = `/download/${video.id}`;
-                actionsCell.appendChild(downloadButton);
+                const downloadOriginal = document.createElement('button');
+                downloadOriginal.textContent = 'Get Original';
+                downloadOriginal.onclick = () => window.location.href = `/download/original/${video.id}`;
+
+                const download480 = document.createElement('button');
+                download480.textContent = 'Get 480p';
+                download480.onclick = () => window.location.href = `/download/transcoded/${video.id}`;
+
+                actionsCell.appendChild(downloadOriginal);
+                actionsCell.appendChild(download480);
             }
             
             row.appendChild(actionsCell);

@@ -65,6 +65,9 @@ public class VideoService {
             ///////// For simplicity, we just process tasks immediately /////////
             /////////  In real project, we would have some kind of smart task queueing and scheduling /////////
             // TODO: Maybe implement proper task queuing and processing on thread?
+            savedFile.setStatus(VideoFileModel.Status.PROCESSING);
+            videoFileRepository.save(savedFile);
+
             this.processTaskNow(remuxTask);
             this.processTaskNow(transcodeTask);
 
@@ -111,7 +114,9 @@ public class VideoService {
     private void processTaskNow(VideoProcessingTask task) {
         // Just execute everything now, since we don't have any scheduling mechanism
         task.prepare(this, this.fileStorageService);
+        System.out.println("Task running...");
         task.execute(this, this.fileStorageService);
+        System.out.println("Task done!");
     }
 
     /**
