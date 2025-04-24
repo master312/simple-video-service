@@ -46,7 +46,8 @@ public class VideoService {
      * Stores actual file in storage, store metadata in DB, and queue for processing
      */
     public void handleNewVideo(MultipartFile file) {
-        VideoFileModel videoFile = new VideoFileModel(file.getOriginalFilename());
+        String orgFilename = file.getOriginalFilename();
+        VideoFileModel videoFile = new VideoFileModel(orgFilename.substring(0, orgFilename.length() - 4)); // remove .flv at end
         VideoFileModel savedFile = videoFileRepository.save(videoFile);
         String newFilename = VideoService.GetFilesystemFilename(savedFile.getId(), VideoFileVariant.ORIGINAL);
         try {
@@ -126,15 +127,10 @@ public class VideoService {
      */
     private static String GetFilesystemFilename(long videoId, VideoFileVariant variant) {
         String strId = Long.toString(videoId);
-        switch (variant) {
-            case ORIGINAL:
-                return strId + ".flv";
-            case REMUX:
-                return strId + ".mp4";
-            case TRANSCODE:
-                return strId + " - 480p.mp4";
-        }
-
-        throw new RuntimeException("Should never be reached!");
+        return switch (variant) {
+            case ORIGINAL -> strId + ".flv";
+            case REMUX -> strId + ".mp4";
+            case TRANSCODE -> strId + " - 480p.mp4";
+        };
     }
 }

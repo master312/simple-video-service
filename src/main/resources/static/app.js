@@ -39,11 +39,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (video.status === 'AVAILABLE') {
                 const downloadOriginal = document.createElement('button');
                 downloadOriginal.textContent = 'Get Original';
-                downloadOriginal.onclick = () => window.location.href = `/download/original/${video.id}`;
+                downloadOriginal.onclick = () => window.location.href = `/downloadOriginal/${video.id}`;
 
                 const download480 = document.createElement('button');
                 download480.textContent = 'Get 480p';
-                download480.onclick = () => window.location.href = `/download/transcoded/${video.id}`;
+                download480.onclick = () => window.location.href = `/downloadTranscoded/${video.id}`;
 
                 actionsCell.appendChild(downloadOriginal);
                 actionsCell.appendChild(download480);
