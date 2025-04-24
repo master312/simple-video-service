@@ -10,7 +10,15 @@ public class TranscodeTask extends VideoProcessingTask {
     }
 
     @Override
+    public void prepare(VideoService videoService, FileStorageService storageService) {
+    }
+
+    @Override
     public void execute(VideoService videoService, FileStorageService storageService) {
         // TODO:////
+    }
+
+    @Override
+    public void cleanup() {
     }
 }

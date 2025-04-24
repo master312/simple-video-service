@@ -11,4 +11,5 @@ public interface FileStorageService {
     void store(MultipartFile file, String filename) throws StorageException;
     void store(File file, String filename) throws StorageException;
     Resource load(String filename) throws StorageFileNotFoundException;
+    void delete(String filename);
 }

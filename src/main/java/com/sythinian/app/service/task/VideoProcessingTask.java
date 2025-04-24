@@ -11,5 +11,13 @@ public abstract class VideoProcessingTask {
         this.video = video;
     }
 
+    public abstract void prepare(VideoService videoService, FileStorageService storageService);
+
     public abstract void execute(VideoService videoService, FileStorageService storageService);
+
+    /**
+     * Invoked when service is done with this task.
+     * Guaranteed to be invoked in any case (exception, success, etc...)
+     */
+    public abstract void cleanup();
 }

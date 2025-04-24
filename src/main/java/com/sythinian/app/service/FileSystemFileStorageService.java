@@ -74,6 +74,16 @@ public class FileSystemFileStorageService implements FileStorageService {
         }
     }
 
+    @Override
+    public void delete(String filename) {
+        try {
+            Path file = validateAndResolveDestinationPath(filename);
+            Files.deleteIfExists(file);
+        } catch (IOException e) {
+            throw new StorageException("Could not delete file: " + filename, e);
+        }
+    }
+
     /**
      * Validates and resolves the destination path for a file
      *
