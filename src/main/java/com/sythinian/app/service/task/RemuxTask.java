@@ -115,16 +115,20 @@ public class RemuxTask extends VideoProcessingTask {
 
     @Override
     public void cleanup() {
-        if (this.inputCtx != null && !this.inputCtx.isNull()) {
-            avformat_close_input(this.inputCtx);
-            this.inputCtx = null;
-        }
+        try {
+            if (this.inputCtx != null && !this.inputCtx.isNull()) {
+                avformat_close_input(this.inputCtx);
+                this.inputCtx = null;
+            }
 
-        if (this.outputCtx != null && !this.outputCtx.isNull()) {
-            // Close the IO context
-            avio_closep(this.outputCtx.pb());
-            avformat_free_context(this.outputCtx);
-            this.outputCtx = null;
+            if (this.outputCtx != null && !this.outputCtx.isNull()) {
+                // Close the IO context
+                avio_closep(this.outputCtx.pb());
+                avformat_free_context(this.outputCtx);
+                this.outputCtx = null;
+            }
+        } catch (Exception e) {
+            System.err.println("RemuxTask error on cleanup. ID: " + this.video.getId() + ": " + e.getMessage());
         }
 
         if (this.tempOutputFile != null) {
