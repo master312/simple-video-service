@@ -17,11 +17,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 @Service
-public class FileSystemStorageService implements StorageService {
+public class FileSystemFileStorageService implements FileStorageService {
 
     private final Path rootLocation;
 
-    public FileSystemStorageService(StorageProperties properties) {
+    public FileSystemFileStorageService(StorageProperties properties) {
         this.rootLocation = Paths.get(properties.getLocation());
         try {
             Files.createDirectories(rootLocation);

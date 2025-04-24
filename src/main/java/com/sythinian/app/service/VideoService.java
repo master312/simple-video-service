@@ -1,8 +1,10 @@
 package com.sythinian.app.service;
 
-import com.sythinian.app.config.StorageProperties;
 import com.sythinian.app.model.VideoFileModel;
 import com.sythinian.app.repository.VideoFileRepository;
+import com.sythinian.app.service.task.RemuxTask;
+import com.sythinian.app.service.task.TranscodeTask;
+import com.sythinian.app.service.task.VideoProcessingTask;
 import org.bytedeco.ffmpeg.global.avformat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -13,13 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 public class VideoService {
 
     @Autowired
-    private StorageService storageService;
+    private FileStorageService fileStorageService;
 
     @Autowired
     private VideoFileRepository videoFileRepository;
-
-    @Autowired
-    private StorageProperties storageProperties;
 
     public enum VideoFileVariant {
         // Loads original flv
@@ -43,14 +42,27 @@ public class VideoService {
         VideoFileModel savedFile = videoFileRepository.save(videoFile);
         String newFilename = VideoService.GetFilesystemFilename(savedFile.getId(), VideoFileVariant.ORIGINAL);
         try {
-            storageService.store(file, newFilename);
+            fileStorageService.store(file, newFilename);
         } catch (Exception e) {
             videoFileRepository.delete(videoFile);
             throw e;
         }
 
         System.out.println("New video file stored!");
-        this.processVideo(videoFile);
+
+        ///////// For simplicity, we just process tasks immediately /////////
+        // TODO: Maybe implement proper task queuing and processing on thread.
+        long start = System.currentTimeMillis();
+        TranscodeTask transcodeTask = new TranscodeTask(savedFile);
+        RemuxTask remuxTask = new RemuxTask(savedFile);
+
+        this.processTaskNow(transcodeTask);
+        this.processTaskNow(remuxTask);
+
+        savedFile.setStatus(VideoFileModel.Status.AVAILABLE);
+        videoFileRepository.save(savedFile);
+
+        System.out.println("Video ID: " + savedFile.getId() + " processed in " + (System.currentTimeMillis() - start) + "ms");
     }
 
     /**
@@ -60,25 +72,11 @@ public class VideoService {
      */
     public Resource loadVideoFile(long videoId, VideoFileVariant variant) {
         String filename = VideoService.GetFilesystemFilename(videoId, VideoFileVariant.ORIGINAL);
-        return this.storageService.load(filename);
+        return this.fileStorageService.load(filename);
     }
 
-    private void processVideo(VideoFileModel video) {
-        long start = System.currentTimeMillis();
-        long videoId = video.getId();
-        System.out.println("Processing video id: " + videoId);
-
-        Resource videoFile = this.loadVideoFile(videoId, VideoFileVariant.ORIGINAL);
-        this.reMuxVideo(videoId, videoFile);
-        this.transcode480p(videoId, videoFile);
-
-        System.out.println("Video processing id: " + videoId + " done in: " + (System.currentTimeMillis() - start) + "ms");
-    }
-
-    private void reMuxVideo(long videoId, Resource sourceFile) {
-    }
-
-    private void transcode480p(long videoId, Resource sourceFile) {
+    private void processTaskNow(VideoProcessingTask task) {
+        task.execute(this, this.fileStorageService);
     }
 
     /**
