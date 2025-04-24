@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 
-import static org.bytedeco.ffmpeg.global.avutil.AV_LOG_INFO;
+import static org.bytedeco.ffmpeg.global.avutil.AV_LOG_ERROR;
 import static org.bytedeco.ffmpeg.global.avutil.av_log_set_level;
 
 @Service
@@ -37,7 +37,7 @@ public class VideoService {
 
     public VideoService() {
         FFmpegLogCallback.set();
-        av_log_set_level(AV_LOG_INFO);
+        av_log_set_level(AV_LOG_ERROR);
         System.out.println("$$$$$ libAvFormat version: " + avformat.avformat_version());
     }
 
@@ -65,8 +65,8 @@ public class VideoService {
             ///////// For simplicity, we just process tasks immediately /////////
             /////////  In real project, we would have some kind of smart task queueing and scheduling /////////
             // TODO: Maybe implement proper task queuing and processing on thread?
-            this.processTaskNow(transcodeTask);
             this.processTaskNow(remuxTask);
+            this.processTaskNow(transcodeTask);
 
             savedFile.setStatus(VideoFileModel.Status.AVAILABLE);
             videoFileRepository.save(savedFile);
